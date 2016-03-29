@@ -21,6 +21,7 @@ var RecipeStep = React.createClass({
 		};
 	},
 
+
 	handleSubmit: function(){
 
 	},

@@ -6,6 +6,7 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 require('backbone-react-component');
 var LinkedStateMixin = require('react/lib/LinkedStateMixin');
+var forms = require('newforms');
 
 var Parse = require('parse');
 Parse.initialize("tiygzz");
@@ -23,6 +24,7 @@ var MenuItem = require('react-bootstrap').MenuItem;
 var Ingredient = require('./ingredient.jsx');
 var RecipeStep = require('./recipestep.jsx');
 var SiteHeader = require('./siteheader.jsx');
+var IngredientFormSet = require('../forms.js').IngredientFormSet;
 
 
 var AddRecipeComponent = React.createClass({
@@ -42,16 +44,14 @@ var AddRecipeComponent = React.createClass({
 
 			};
 		},
-		addStep: function(stepObj){
-    var steps = this.state.steps;
-    console.log(stepObj);
-    steps.push(stepObj);
-    this.setState({'steps': steps});
-  },
+
 	handleSubmit: function(e){
 		e.preventDefault();
 		// Simple syntax to create a new subclass of Parse.Object.
 		var Recipe = Parse.Object.extend("Recipe");
+		var Step = Parse.Object.extend("RecipeSteps");
+		var Ingredient = Parse.Object.extend("ingredients");
+
 		//new class instance
 		var recipe = new Recipe();
 		//sets values to parse dashboard
@@ -69,12 +69,13 @@ var AddRecipeComponent = React.createClass({
 
 	},
 	render: function() {
-		var buttonDropdown = (
-			<DropdownButton title="&deg;F" id="input-dropdown-addon">
-				<MenuItem key="1">&deg;F</MenuItem>
-				<MenuItem key="2">&deg;C</MenuItem>
-			</DropdownButton>
-			);
+
+		// var formset = new IngredientFormSet();
+		// var ingredientFormset = formset.forms().map(function(form){
+		// 	return (<RenderForm form={form} />);
+		// });
+
+
 		var steps = this.state.steps.map(function(step, index){
 			return <RecipeStep step={step} index={index} key={index} />;
 		});
@@ -85,11 +86,15 @@ var AddRecipeComponent = React.createClass({
 					<SiteHeader title={"Basic Info"} />
 					<div className="row basic-info-form">
 						<div className="col-sm-4">
+
+
+
 							<Image src="http://ingridwu.dmmdmcfatter.com/wp-content/uploads/2015/01/placeholder.png" alt="..." />
 							<fieldset >
                     <Input type="text" valueLink={this.linkState('url')} id="url" placeholder="Image URL" />
                   </fieldset>
-						</div>
+              </div>
+
 						<div className="col-sm-8">
 
 								<div className="recipe-name-group">
@@ -98,8 +103,7 @@ var AddRecipeComponent = React.createClass({
 									<Input type="text" placeholder="By"
 										valueLink={this.linkState('username')}/>
 
-									<Input type="checkbox" />
-									<Input type="checkbox"/>
+
 								</div>
 						</div>
 					</div>
@@ -113,21 +117,24 @@ var AddRecipeComponent = React.createClass({
                       <option value="Breakfast">Breakfast</option>
                       <option value="Lunch">Lunch</option>
                       <option value="Dinner">Dinner</option>
+                      <option value="Dessert">Dessert</option>
+                      <option value="Appetizer">Appetizer</option>
+
                     </Input>
 								</div>
 
 								<div className="col-sm-3">
-										<Input  type="text" placeholder="Prep Time" valueLink={this.linkState('preptime')} />
+										<Input  type="text" placeholder="Prep Time" valueLink={this.linkState('preptime')} addonAfter="mins" />
 								</div>
 								<div className="col-sm-3">
-										<Input type="text" placeholder="Cook Time" valueLink={this.linkState('cooktime')}/>
+										<Input type="text" placeholder="Cook Time" valueLink={this.linkState('cooktime')} addonAfter="mins"/>
 								</div>
 								<div className="col-sm-3">
-										<Input type="number" placeholder="Temp" buttonAfter={buttonDropdown} />
+										<Input type="number" placeholder="Temp" addonAfter="&deg;F" />
 								</div>
 								<div className="row">
 
-									<RecipeStep index={1}/>
+									<RecipeStep index={1} />
 								</div>
 
 								<div className="row">

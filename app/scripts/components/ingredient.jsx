@@ -23,7 +23,7 @@ var Ingredient = React.createClass({
           <Input type="text" placeholder="Ingredient" />
         </div>
         <div className="col-sm-2">
-          <ButtonInput value="Add" onClick={this.handleSubmit} block />
+          <ButtonInput value="Add this step" onClick={this.handleSubmit} block />
         </div>
       </div>
     );

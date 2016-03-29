@@ -11,6 +11,7 @@ var LoginPageComponent = require("./LoginPageComponent.jsx").LoginPageComponent;
 var HomePageComponent = require("./HomePageComponent.jsx").HomePageComponent;
 var UserRecipesComponent = require("./UserRecipesComponent.jsx").UserRecipesComponent;
 var AddRecipeComponent = require("./AddRecipeComponent.jsx").AddRecipeComponent;
+var OneRecipeComponent = require("./onerecipecomponent.jsx").OneRecipeComponent;
 
 var Parse = require('parse');
 Parse.initialize("tiygzz");
@@ -40,6 +41,7 @@ var IndexComponent = React.createClass({
   },
 
 	render: function() {
+        var user = Parse.User.current();
 		return (
 			<div>
 			<div className="container">
@@ -68,6 +70,8 @@ var NavBarComponent = React.createClass({
 
 
 	render: function() {
+        var currentUser = Parse.User.current().get('username');
+        console.log(currentUser);
 		return (
 			<div id="wrapper">
 
@@ -89,18 +93,9 @@ var NavBarComponent = React.createClass({
 
 
                 <li className="dropdown">
-                    <a href="#" className="dropdown-toggle" data-toggle="dropdown"><i className="fa fa-user"></i><span> {localStorage.getItem({"currentUser": "username"})} </span><b className="caret"></b></a>
+                    <a href="#" className="dropdown-toggle" data-toggle="dropdown"><i className="fa fa-user"></i><span> {currentUser} </span><b className="caret"></b></a>
                     <ul className="dropdown-menu">
-                        <li>
-                            <a href="#"><i className="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i className="fa fa-fw fa-envelope"></i> Inbox</a>
-                        </li>
-                        <li>
-                            <a href="#"><i className="fa fa-fw fa-gear"></i> Settings</a>
-                        </li>
-                        <li className="divider"></li>
+
                         <li>
                             <a href="#"><i className="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
@@ -127,7 +122,7 @@ var SideBarComponent = React.createClass({
             <ul className="sidebar-nav">
 
                 <li>
-                    <a href="#home">Dashboard</a>
+                    <a href="#home">Home</a>
                 </li>
                 <li>
                     <a href="#recipe">Your Recipes</a>
@@ -166,9 +161,13 @@ var MainContentComponent = React.createClass({
     if(this.state.router.current == "home"){
         body = <HomePageComponent />;
         return body;
-    }
+    } {/*
     if(this.state.router.current == "recipe"){
       body = <UserRecipesComponent />;
+      return body;
+    } */}
+    if(this.state.router.current == "recipe"){
+      body = <OneRecipeComponent recipe={this.state.router.id}/>;
       return body;
     }
     if(this.state.router.current == "add"){
